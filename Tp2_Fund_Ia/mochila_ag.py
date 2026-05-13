@@ -155,6 +155,7 @@ class GAResult:
     generations: int
     best_weight: int
     best_profit: int
+    history: List[float] = None  # melhor fitness por geração
 
 
 # ── Loop Principal do AG ─────────────────────────────────────────────────────
@@ -178,6 +179,7 @@ def run_ga(
     best_individual = population[best_idx][:]
     best_fitness = fitnesses[best_idx]
     stagnation = 0
+    history = [best_fitness]
 
     for gen in range(1, config.max_gen + 1):
         new_pop = [best_individual[:]]  # elitismo: preserva o melhor
@@ -212,6 +214,8 @@ def run_ga(
         else:
             stagnation += 1
 
+        history.append(best_fitness)
+
         if stagnation >= config.stagnation_limit:
             break
 
@@ -223,6 +227,7 @@ def run_ga(
         generations=gen,
         best_weight=best_weight,
         best_profit=best_profit,
+        history=history,
     )
 
 
